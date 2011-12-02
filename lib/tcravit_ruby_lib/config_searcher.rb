@@ -23,6 +23,8 @@ module TcravitRubyLib #:nodoc:
     # specified directory doesn't exist.
     # * +:look_for+ or +:config_dir+ - The name of the configuration directory
     # to look for. Defaults to +.config+ if unspecified.
+    # * +:only_container_dir: - If this option is true, the +:look_for+ 
+    # directory will not be returned as part of the path.
     #
     # === Returns
     #
@@ -30,17 +32,25 @@ module TcravitRubyLib #:nodoc:
     # string. Otherwise, an empty string will be returned. If the +start_in+
     # directory doesn't exist, an exception will be raised.
     def self.locate_config_dir(opts={})
-      start_dir = opts[:start_in] || opts[:start_dir] || "."
-      config_dir_name = opts[:look_for] || opts[:config_dir] || ".config"
+      start_dir           = opts[:start_in] || opts[:start_dir] || "."
+      config_dir_name     = opts[:look_for] || opts[:config_dir] || ".config"
+      only_container_dir  = opts[:only_container_dir] || false
       
       dir = Pathname.new(start_dir)
       app_config_dir = dir + config_dir_name
       
-       if dir.children.include?(app_config_dir)  
-         app_config_dir.expand_path.to_s
+       if dir.children.include?(app_config_dir)
+         if only_container_dir
+           app_config_dir.to_s.split('/')[0..-2].join('/')
+         else
+           app_config_dir.expand_path.to_s
+         end
        else  
          return nil if dir.expand_path.root?  
-         locate_config_dir(start_in: dir.parent.to_s, look_for: config_dir_name)  
+         # In the event the opts come from a hash that's used elsewhere, I don't
+         # want to modify it, so I make a copy and replace the :start_in value.
+         # I'm sure there's a better way to do this.
+         locate_config_dir(opts.reject{|k,v| k == :start_in}.merge({start_in: dir.parent.to_s}))  
        end      
     end
   end
