@@ -3,7 +3,7 @@ require 'pathname'
 module TcravitRubyLib #:nodoc:
 
   # Utilities for locating a configuration directory within a tree.
-  # 
+  #
   # Unix utilities such as +git+ will look for the .git directory in a 
   # project by starting with the current directory and traversing upward
   # until a .git folder is found. This allows local configuration in a 
@@ -11,6 +11,13 @@ module TcravitRubyLib #:nodoc:
   #
   # This module, inspired by a post on Practicing Ruby, implements that 
   # kind of traversal for Ruby applications.
+  #
+  # Author:: Tammy Cravit (mailto:tammy@tammycravit.com)
+  # Copyright:: Copyright (c) 2011, Tammy Cravit. All rights reserved.
+  # License:: This program is free software: you can redistribute it and/or modify
+  #           it under the terms of the GNU General Public License as published by
+  #           the Free Software Foundation, either version 3 of the License, or
+  #           (at your option) any later version.  
   module ConfigSearcher
 
     # Locate a configuration folder by starting in the specified directory
