@@ -1,3 +1,6 @@
+require 'spec_helper'
+require "tcravit_ruby_lib/utility"
+
 describe "TcravitRubyLib::Utility" do
   it "random_alphanumeric() should return a random string of the correct length" do
     s = TcravitRubyLib::Utility.random_alphanumeric(16)
