@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe "TcravitRubyLib::AppBanner" do
 
 	context "the basics" do
