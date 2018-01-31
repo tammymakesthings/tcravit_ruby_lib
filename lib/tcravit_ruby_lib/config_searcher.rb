@@ -45,7 +45,8 @@ module TcravitRubyLib #:nodoc:
       
       dir = Pathname.new(start_dir)
       app_config_dir = dir + config_dir_name
-      
+     
+			begin
        if dir.children.include?(app_config_dir)
          if only_container_dir
            app_config_dir.to_s.split('/')[0..-2].join('/')
@@ -59,6 +60,9 @@ module TcravitRubyLib #:nodoc:
          # I'm sure there's a better way to do this.
          locate_config_dir(opts.reject{|k,v| k == :start_in}.merge({start_in: dir.parent.to_s}))  
        end      
+			rescue
+				raise ArgumentError, "Start directory \"#{start_dir}\" doesn't exist"
+			end
     end
   end
 end

@@ -33,16 +33,13 @@ describe "TcravitRubyLib::ConfigSearcher" do
   end
   
   it "should raise an exception when the start_in directory doesn't exist" do
-    an_exception = nil
-  
-    begin
-      dir_path = TcravitRubyLib::ConfigSearcher.locate_config_dir(start_in: "#{DEEP_DIR}xxxxxxx", look_for: ".snausages")
-    rescue => e
-      an_exception = e
-    end
-  
-    an_exception.should_not be_nil
-    an_exception.message.should == "No such file or directory - #{DEEP_DIR}xxxxxxx"
+		caught_ex = false
+		begin
+			TcravitRubyLib::ConfigSearcher.locate_config_dir(start_in: "#{DEEP_DIR}xxxxxxx", look_for: ".snausages")
+		rescue ArgumentError
+			caught_ex = true
+		end
+		caught_ex.should == true
   end
 
   it "should behave the same for the alternative option names" do
