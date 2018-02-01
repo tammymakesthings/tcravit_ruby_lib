@@ -1,6 +1,6 @@
 require 'rspec/core/rake_task'
 require "bundler/gem_tasks"
-Dir.glob("#{File.join(File.dirname(__FILE__), 'tasks')}/**/*.rake").each { |r| load r }
+require "tcravit_ruby_lib/rake_tasks"
 
 RSpec::Core::RakeTask.new('spec')
 
