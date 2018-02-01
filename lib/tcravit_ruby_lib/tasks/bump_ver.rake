@@ -37,75 +37,84 @@ def find_version_file
 	end
 end
 
-def update_gem_version_part(index=2)
+def write_output_to(file, output)
+	open(file, "w") do |f|
+		f.puts(output)
+	end
+end
+
+def create_file_contents(version_data)
+	buf = "module TcravitRubyLib\n"
+	buf = buf + "\tVERSION_DATA = [" + version_data.join(", ") + "]\n"
+	buf = buf + "\tVERSION = VERSION_DATA.join(\".\")\n"
+	buf = buf + "end\n"
+end
+
+def load_gem_version_file
 	version_file = find_version_file
 	if version_file.nil?
 		raise ArgumentError, "Could not find version file"
 		exit
 	end
 	require version_file
+	return version_file
+end
 
+def update_gem_version_part(index=2, test_mode=false)
 	positions = ['major', 'minor', 'build']
+
+	version_file = load_gem_version_file
 
 	vd = TcravitRubyLib::VERSION_DATA
 	vd[index] = vd[index] + 1
 
-	buf = "module TcravitRubyLib\n"
-	buf = buf + "\tVERSION_DATA = [" + vd.join(", ") + "]\n"
-	buf = buf + "\tVERSION = VERSION_DATA.join(\".\")\n"
-	buf = buf + "end\n"
-
-	open(version_file, "w") do |f|
-		f.puts(buf)
+	if test_mode then
+		write_output_to("/tmp/bump_ver.out", create_file_contents(vd))
+	else
+		write_output_to(version_file, create_file_contents(vd))
 	end
 
-	puts "Updated #{positions[index]} number to #{vd[index]}; version is now #{vd.join('.')}"
+	puts "Updated #{positions[index]} number to #{vd[index]}; version is now #{vd.join('.')}" unless test_mode
 end
 
-def set_gem_version(major, minor, build)
-	version_file = find_version_file
-	if version_file.nil?
-		raise ArgumentError, "Could not find version file"
-		exit
-	end
+def set_gem_version(major, minor, build, test_mode=false)
+	version_file = load_gem_version_file
+
 	vd = [major, minor, build]
 
-	buf = "module TcravitRubyLib\n"
-	buf = buf + "\tVERSION_DATA = [" + vd.join(", ") + "]\n"
-	buf = buf + "\tVERSION = VERSION_DATA.join(\".\")\n"
-	buf = buf + "end\n"
-
-	open(version_file, "w") do |f|
-		f.puts(buf)
+	if test_mode then
+		write_output_to("/tmp/bump_ver.out", create_file_contents(vd))
+	else
+		write_output_to(version_file, create_file_contents(vd))
 	end
 
-	puts "Forced Gem version to #{vd.join('.')}"
+	puts "Forced Gem version to #{vd.join('.')}" unless test_mode
 end
 
 namespace :version do
 	namespace :bump do
 		desc 'Increment the major number of the gem'
-		task :major do
-			update_gem_version_part 0
+		task :major, [:test_mode] do |t, args|
+			update_gem_version_part 0, args[:test_mode]
 		end
 
 		desc 'Increment the minor number of the gem'
-		task :minor do
-			update_gem_version_part 1
+		task :minor, [:test_mode] do |t, args|
+			update_gem_version_part 1, args[:test_mode]
 		end
 
 		desc 'Increment the build number of the gem'
-		task :build do
-			update_gem_version_part 2
+		task :build, [:test_mode] do |t, args|
+			update_gem_version_part 2, args[:test_mode]
 		end
 
 		desc "Set the version number to a specific version"
-		task :set, [:major, :minor, :build] do |t, args|
+		task :set, [:major, :minor, :build, :test_mode] do |t, args|
 			major = args[:major] || 1
 			minor = args[:minor] || 0
 			build = args[:build] || 0
 
-			set_gem_version major, minor, build
+			set_gem_version major, minor, build, args[:test_mode]
 		end
 	end
 end
