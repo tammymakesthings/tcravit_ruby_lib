@@ -62,6 +62,26 @@ def update_gem_version_part(index=2)
 	puts "Updated #{positions[index]} number to #{vd[index]}; version is now #{vd.join('.')}"
 end
 
+def set_gem_version(major, minor, build)
+	version_file = find_version_file
+	if version_file.nil?
+		raise ArgumentError, "Could not find version file"
+		exit
+	end
+	vd = [major, minor, build]
+
+	buf = "module TcravitRubyLib\n"
+	buf = buf + "\tVERSION_DATA = [" + vd.join(", ") + "]\n"
+	buf = buf + "\tVERSION = VERSION_DATA.join(\".\")\n"
+	buf = buf + "end\n"
+
+	open(version_file, "w") do |f|
+		f.puts(buf)
+	end
+
+	puts "Forced Gem version to #{vd.join('.')}"
+end
+
 namespace :version do
 	namespace :bump do
 		desc 'Increment the major number of the gem'
@@ -77,6 +97,15 @@ namespace :version do
 		desc 'Increment the build number of the gem'
 		task :build do
 			update_gem_version_part 2
+		end
+
+		desc "Set the version number to a specific version"
+		task :set, [:major, :minor, :build] do |t, args|
+			major = args[:major] || 1
+			minor = args[:minor] || 0
+			build = args[:build] || 0
+
+			set_gem_version major, minor, build
 		end
 	end
 end
