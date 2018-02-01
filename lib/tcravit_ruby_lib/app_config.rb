@@ -1,3 +1,24 @@
+############################################################################
+# TcravitRubyLib: Random useful stuff for Ruby programming.
+#
+# File        : app_config.rb
+# Description : Simple and flexible DSL-like app config storage.
+############################################################################
+#  Copyright 2011-2018, Tammy Cravit.
+# 
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+############################################################################
+
 module TcravitRubyLib #:nodoc:
 
   # Simple and Flexible Configuration Data Storage.
@@ -20,12 +41,6 @@ module TcravitRubyLib #:nodoc:
   #     TcravitRubyLib::AppConfig.some_value = 2048
   #     TcravitRubyLib::AppConfig.some_value     # => 2048
   #      
-  # Author:: Tammy Cravit (mailto:tammy@tammycravit.com)
-  # Copyright:: Copyright (c) 2011, Tammy Cravit. All rights reserved.
-  # License:: This program is free software: you can redistribute it and/or modify
-  #           it under the terms of the GNU General Public License as published by
-  #           the Free Software Foundation, either version 3 of the License, or
-  #           (at your option) any later version.
   
   module AppConfig
     extend self

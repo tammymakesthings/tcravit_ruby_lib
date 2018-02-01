@@ -1,3 +1,4 @@
 module TcravitRubyLib
-  VERSION = "0.1.4"
+	VERSION_DATA = [0, 1, 6]
+	VERSION = VERSION_DATA.join(".")
 end
