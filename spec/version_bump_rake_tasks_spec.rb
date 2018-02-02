@@ -17,8 +17,8 @@ end
 describe "version:bump:major", type: :rake do
 	context "the basics" do 
 		it "should be a rake task" do
-			subject.should be_a(Rake::Task)
-			subject.name.should == "version:bump:major"
+			expect(subject).to be_a(Rake::Task)
+			expect(subject.name).to be == "version:bump:major"
 		end
 	end
 
@@ -30,23 +30,23 @@ describe "version:bump:major", type: :rake do
 		it "should generate a file with the right format" do
 			args = to_task_arguments(1)
 			task.execute(args)
-			File.exist?("/tmp/bump_ver.out").should == true
+			expect(File.exist?("/tmp/bump_ver.out")).to be == true
 			contents = read_output_file("/tmp/bump_ver.out")
-			contents[0].should == "module TcravitRubyLib"
-			contents[1].should match(/^\s+VERSION_DATA = \[\d+, \d+, \d+\]\s*$/)
-			contents[3].should == "end"
+			expect(contents[0]).to be == "module TcravitRubyLib"
+			expect(contents[1]).to match(/^\s+VERSION_DATA = \[\d+, \d+, \d+\]\s*$/)
+			expect(contents[3]).to be == "end"
 		end
 
 		it "should increment the major version number" do
 			initial_version = TcravitRubyLib::VERSION_DATA.clone
 			args = to_task_arguments(1)
 			task.execute(args)
-			File.exist?("/tmp/bump_ver.out").should == true
+			expect(File.exist?("/tmp/bump_ver.out")).to be == true
 			contents = read_output_file("/tmp/bump_ver.out")
 			v = eval(contents[1].downcase)
-			v[0].should == (initial_version[0] + 1)
-			v[1].should == initial_version[1]
-			v[2].should == initial_version[2]
+			expect(v[0]).to be == (initial_version[0] + 1)
+			expect(v[1]).to be == initial_version[1]
+			expect(v[2]).to be == initial_version[2]
 		end
 	end
 end
@@ -54,8 +54,8 @@ end
 describe "version:bump:minor", type: :rake do
 	context "the basics" do 
 		it "should be a rake task" do
-			subject.should be_a(Rake::Task)
-			subject.name.should == "version:bump:minor"
+			expect(subject).to be_a(Rake::Task)
+			expect(subject.name).to be == "version:bump:minor"
 		end
 	end
 
@@ -67,23 +67,23 @@ describe "version:bump:minor", type: :rake do
 		it "should generate a file with the right format" do
 			args = to_task_arguments(1)
 			task.execute(args)
-			File.exist?("/tmp/bump_ver.out").should == true
+			expect(File.exist?("/tmp/bump_ver.out")).to be == true
 			contents = read_output_file("/tmp/bump_ver.out")
-			contents[0].should == "module TcravitRubyLib"
-			contents[1].should match(/^\s+VERSION_DATA = \[\d+, \d+, \d+\]\s*$/)
-			contents[3].should == "end"
+			expect(contents[0]).to be == "module TcravitRubyLib"
+			expect(contents[1]).to match(/^\s+VERSION_DATA = \[\d+, \d+, \d+\]\s*$/)
+			expect(contents[3]).to be == "end"
 		end
 
 		it "should increment the minor version number" do
 			initial_version = TcravitRubyLib::VERSION_DATA.clone
 			args = to_task_arguments(1)
 			task.execute(args)
-			File.exist?("/tmp/bump_ver.out").should == true
+			expect(File.exist?("/tmp/bump_ver.out")).to be == true
 			contents = read_output_file("/tmp/bump_ver.out")
 			v = eval(contents[1].downcase)
-			v[0].should == initial_version[0]
-			v[1].should == (initial_version[1] + 1)
-			v[2].should == initial_version[2]
+			expect(v[0]).to be == initial_version[0]
+			expect(v[1]).to be == (initial_version[1] + 1)
+			expect(v[2]).to be == initial_version[2]
 		end
 	end
 end
@@ -91,8 +91,8 @@ end
 describe "version:bump:build", type: :rake do
 	context "the basics" do 
 		it "should be a rake task" do
-			subject.should be_a(Rake::Task)
-			subject.name.should == "version:bump:build"
+			expect(subject).to be_a(Rake::Task)
+			expect(subject.name).to be == "version:bump:build"
 		end
 	end
 
@@ -104,23 +104,23 @@ describe "version:bump:build", type: :rake do
 		it "should generate a file with the right format" do
 			args = to_task_arguments(1)
 			task.execute(args)
-			File.exist?("/tmp/bump_ver.out").should == true
+			expect(File.exist?("/tmp/bump_ver.out")).to be == true
 			contents = read_output_file("/tmp/bump_ver.out")
-			contents[0].should == "module TcravitRubyLib"
-			contents[1].should match(/^\s+VERSION_DATA = \[\d+, \d+, \d+\]\s*$/)
-			contents[3].should == "end"
+			expect(contents[0]).to be == "module TcravitRubyLib"
+			expect(contents[1]).to match(/^\s+VERSION_DATA = \[\d+, \d+, \d+\]\s*$/)
+			expect(contents[3]).to be == "end"
 		end
 
 		it "should increment build version number" do
 			initial_version = TcravitRubyLib::VERSION_DATA.clone
 			args = to_task_arguments(1)
 			task.execute(args)
-			File.exist?("/tmp/bump_ver.out").should == true
+			expect(File.exist?("/tmp/bump_ver.out")).to be == true
 			contents = read_output_file("/tmp/bump_ver.out")
 			v = eval(contents[1].downcase)
-			v[0].should == initial_version[0]
-			v[1].should == initial_version[1]
-			v[2].should == (initial_version[2] + 1)
+			expect(v[0]).to be == initial_version[0]
+			expect(v[1]).to be == initial_version[1]
+			expect(v[2]).to be == (initial_version[2] + 1)
 		end
 	end
 end
@@ -128,8 +128,8 @@ end
 describe "version:bump:set", type: :rake do
 	context "the basics" do 
 		it "should be a rake task" do
-			subject.should be_a(Rake::Task)
-			subject.name.should == "version:bump:set"
+			expect(subject).to be_a(Rake::Task)
+			expect(subject.name).to be == "version:bump:set"
 		end
 	end
 
@@ -141,22 +141,22 @@ describe "version:bump:set", type: :rake do
 		it "should generate a file with the right format" do
 			args = to_task_arguments(3,4,5,11)
 			task.execute(args)
-			File.exist?("/tmp/bump_ver.out").should == true
+			expect(File.exist?("/tmp/bump_ver.out")).to be == true
 			contents = read_output_file("/tmp/bump_ver.out")
-			contents[0].should == "module TcravitRubyLib"
-			contents[1].should match(/^\s+VERSION_DATA = \[\d+, \d+, \d+\]\s*$/)
-			contents[3].should == "end"
+			expect(contents[0]).to be == "module TcravitRubyLib"
+			expect(contents[1]).to match(/^\s+VERSION_DATA = \[\d+, \d+, \d+\]\s*$/)
+			expect(contents[3]).to be == "end"
 		end
 
 		it "should generate a file with the right version number" do
 			args = to_task_arguments(3,4,5,1)
 			task.execute(args)
-			File.exist?("/tmp/bump_ver.out").should == true
+			expect(File.exist?("/tmp/bump_ver.out")).to be == true
 			contents = read_output_file("/tmp/bump_ver.out")
 			v = eval(contents[1].downcase)
-			v[0].should == 3
-			v[1].should == 4
-			v[2].should == 5
+			expect(v[0]).to be == 3
+			expect(v[1]).to be == 4
+			expect(v[2]).to be == 5
 		end
 	end
 end

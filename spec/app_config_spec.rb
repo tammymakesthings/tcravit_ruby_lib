@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'fileutils'
 
-describe "TcravitRubyLib::AppConfig" do
+RSpec.describe "TcravitRubyLib::AppConfig" do
     
   STRING_VAL = "string"
   NUMERIC_VAL = 18293
@@ -16,23 +16,23 @@ describe "TcravitRubyLib::AppConfig" do
   end
   
   it "should return the values for defined properties" do
-    TcravitRubyLib::AppConfig.string_value.should == STRING_VAL
-    TcravitRubyLib::AppConfig.numeric_value.should == NUMERIC_VAL
-    TcravitRubyLib::AppConfig.symbol_value.should == SYMBOLIC_VAL      
+    expect(TcravitRubyLib::AppConfig.string_value).to be == STRING_VAL
+    expect(TcravitRubyLib::AppConfig.numeric_value).to be == NUMERIC_VAL
+    expect(TcravitRubyLib::AppConfig.symbol_value).to be == SYMBOLIC_VAL      
   end
   
   it "should raise an error for undefined properties" do
-    lambda { TcravitRubyLib::AppConfig.fishpaste_value }.should raise_error
+    expect { TcravitRubyLib::AppConfig.fishpaste_value }.to raise_error
   end
   
   it "should allow me to change a configuration property" do
     TcravitRubyLib::AppConfig.string_value = "new value"
-    TcravitRubyLib::AppConfig.string_value.should == "new value"
+    expect(TcravitRubyLib::AppConfig.string_value).to be == "new value"
   end
   
   it "should allow me to remove a configuration property" do
     TcravitRubyLib::AppConfig.remove!(:string_value)
-    lambda { TcravitRubyLib::AppConfig.string_value }.should raise_error
+    expect { TcravitRubyLib::AppConfig.string_value }.to raise_error
   end
   
   it "should allow additional properties to be added" do
@@ -42,8 +42,8 @@ describe "TcravitRubyLib::AppConfig" do
     TcravitRubyLib::AppConfig.configure do
       and_another_value 384
     end
-    TcravitRubyLib::AppConfig.another_value.should == 192
-    TcravitRubyLib::AppConfig.and_another_value.should == 384
+    expect(TcravitRubyLib::AppConfig.another_value).to be == 192
+    expect(TcravitRubyLib::AppConfig.and_another_value).to be == 384
   end
   
 end

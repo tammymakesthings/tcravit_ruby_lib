@@ -4,23 +4,23 @@ class ConfigurableTest
 	include TcravitRubyLib::Configurable.with(:attr_a, :attr_b, :attr_c)
 end
 
-describe "TCravitRubyLib::Configurable" do
+RSpec.describe "TCravitRubyLib::Configurable" do
 	it "should respond to the config method and provide its configuration" do
-		ConfigurableTest.should respond_to(:config)
+		expect(ConfigurableTest).to respond_to(:config)
 	end
 
 	it "should respond to the Configure method and provide a space for configuration" do
-		ConfigurableTest.should respond_to(:configure)
+		expect(ConfigurableTest).to respond_to(:configure)
 	end
 
 	it "should respond to attributes for the configuration accessors" do
 		["attr_a", "attr_b", "attr_c"].each do |a|
-			ConfigurableTest.config.should respond_to(a.to_sym)
-			ConfigurableTest.config.should respond_to("#{a}=".to_sym)
+			expect(ConfigurableTest.config).to respond_to(a.to_sym)
+			expect(ConfigurableTest.config).to respond_to("#{a}=".to_sym)
 		end
 		["nonexistent_attr"].each do |a|
-			ConfigurableTest.config.should_not respond_to(a.to_sym)
-			ConfigurableTest.config.should_not respond_to("#{a}=".to_sym)
+			expect(ConfigurableTest.config).not_to respond_to(a.to_sym)
+			expect(ConfigurableTest.config).not_to respond_to("#{a}=".to_sym)
 		end
 	end
 
@@ -30,8 +30,8 @@ describe "TCravitRubyLib::Configurable" do
 			attr_b "Squid"
 			attr_c :FishPaste
 		end
-		ConfigurableTest.config.attr_a.should == 42
-		ConfigurableTest.config.attr_b.should == "Squid"
-		ConfigurableTest.config.attr_c.should == :FishPaste
+		expect(ConfigurableTest.config.attr_a).to be == 42
+		expect(ConfigurableTest.config.attr_b).to be == "Squid"
+		expect(ConfigurableTest.config.attr_c).to be == :FishPaste
 	end
 end

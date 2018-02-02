@@ -1,14 +1,16 @@
-describe "TcravitRubyLib" do
+require 'spec_helper'
+
+RSpec.describe "TcravitRubyLib" do
 	it "should define a VERSION constant" do
-		TcravitRubyLib::VERSION.should_not be_nil
-		TcravitRubyLib::VERSION.should match(/\d+\.\d+\.\d+/)
+		expect(TcravitRubyLib::VERSION).to_not be_nil
+		expect(TcravitRubyLib::VERSION).to match(/\d+\.\d+\.\d+/)
 	end
 
 	it "should define a VERSION_DATA array" do
-		TcravitRubyLib::VERSION_DATA.should_not be_nil
-		TcravitRubyLib::VERSION_DATA.length.should == 3
+		expect(TcravitRubyLib::VERSION_DATA).not_to be_nil
+		expect(TcravitRubyLib::VERSION_DATA.length).to be == 3
 		TcravitRubyLib::VERSION_DATA.each do |i|
-			i.should be_a_kind_of(Numeric)
+			expect(i).to be_a_kind_of(Numeric)
 		end
 	end
 end
