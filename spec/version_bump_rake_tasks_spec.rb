@@ -27,7 +27,7 @@ describe "version:bump:major", type: :rake do
       File.delete("/tmp/bump_ver.out") if File.exist?("/tmp/bump_ver.out")
     end
 
-    it "should generate a file with the right format" do
+    it "should generate a file with the right format and module name" do
       args = to_task_arguments(1)
       task.execute(args)
       expect(File.exist?("/tmp/bump_ver.out")).to be == true
@@ -64,7 +64,7 @@ describe "version:bump:minor", type: :rake do
       File.delete("/tmp/bump_ver.out") if File.exist?("/tmp/bump_ver.out")
     end
 
-    it "should generate a file with the right format" do
+    it "should generate a file with the right format and module name" do
       args = to_task_arguments(1)
       task.execute(args)
       expect(File.exist?("/tmp/bump_ver.out")).to be == true
@@ -101,7 +101,7 @@ describe "version:bump:build", type: :rake do
       File.delete("/tmp/bump_ver.out") if File.exist?("/tmp/bump_ver.out")
     end
 
-    it "should generate a file with the right format" do
+    it "should generate a file with the right format and module name" do
       args = to_task_arguments(1)
       task.execute(args)
       expect(File.exist?("/tmp/bump_ver.out")).to be == true
@@ -138,7 +138,7 @@ describe "version:bump:set", type: :rake do
       File.delete("/tmp/bump_ver.out") if File.exist?("/tmp/bump_ver.out")
     end
 
-    it "should generate a file with the right format" do
+    it "should generate a file with the right format and module name" do
       args = to_task_arguments(3,4,5,11)
       task.execute(args)
       expect(File.exist?("/tmp/bump_ver.out")).to be == true

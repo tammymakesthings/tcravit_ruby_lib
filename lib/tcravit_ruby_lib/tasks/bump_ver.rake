@@ -43,8 +43,8 @@ def write_output_to(file, output)
   end
 end
 
-def create_file_contents(version_data)
-  buf = "module TcravitRubyLib\n"
+def create_file_contents(module_name, version_data)
+  buf = "module #{module_name}\n"
   buf = buf + "\tVERSION_DATA = [" + version_data.join(", ") + "]\n"
   buf = buf + "\tVERSION = VERSION_DATA.join(\".\")\n"
   buf = buf + "end\n"
@@ -60,18 +60,33 @@ def load_gem_version_file
   return version_file
 end
 
+def find_module_name_from(version_file)
+  module_name = ""
+  File.foreach(version_file) do |l|
+    next if l.match(/^\s*$/)
+    next if l.match(/^\s*\#/)
+    m = l.match(/^\s*module (\S+)\s*$/) 
+    unless  m.nil? 
+      module_name = m[1]
+      break
+    end
+  end
+  return module_name
+end
+
 def update_gem_version_part(index=2, test_mode=false)
   positions = ['major', 'minor', 'build']
 
   version_file = load_gem_version_file
+  module_name = find_module_name_from(version_file)
 
   vd = TcravitRubyLib::VERSION_DATA
   vd[index] = vd[index] + 1
 
   if test_mode then
-    write_output_to("/tmp/bump_ver.out", create_file_contents(vd))
+    write_output_to("/tmp/bump_ver.out", create_file_contents(module_name, vd))
   else
-    write_output_to(version_file, create_file_contents(vd))
+    write_output_to(version_file, create_file_contents(module_name, vd))
   end
 
   puts "Updated #{positions[index]} number to #{vd[index]}; version is now #{vd.join('.')}" unless test_mode
@@ -79,13 +94,14 @@ end
 
 def set_gem_version(major, minor, build, test_mode=false)
   version_file = load_gem_version_file
+  module_name = find_module_name_from(version_file)
 
   vd = [major, minor, build]
 
   if test_mode then
-    write_output_to("/tmp/bump_ver.out", create_file_contents(vd))
+    write_output_to("/tmp/bump_ver.out", create_file_contents(module_name, vd))
   else
-    write_output_to(version_file, create_file_contents(vd))
+    write_output_to(version_file, create_file_contents(module_name, vd))
   end
 
   puts "Forced Gem version to #{vd.join('.')}" unless test_mode
