@@ -22,15 +22,15 @@
 require 'rake'
 
 module TcravitRubyLib
-	class RakeTasks
-		include Rake::DSL if defined?(Rake::DSL)
+  class RakeTasks
+    include Rake::DSL if defined?(Rake::DSL)
 
-		def install_tasks
-			Dir["#{File.join(File.dirname(__FILE__), 'tasks')}/**/*.rake"].each do |f|
-				load f
-			end
-		end
-	end
+    def install_tasks
+      Dir["#{File.join(File.dirname(__FILE__), 'tasks')}/**/*.rake"].each do |f|
+        load f
+      end
+    end
+  end
 end
 
 TcravitRubyLib::RakeTasks.new.install_tasks

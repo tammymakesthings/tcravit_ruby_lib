@@ -3,8 +3,8 @@ require 'tcravit_ruby_lib'
 
 RSpec.configure do |config|
   config.formatter     = 'progress'
-	config.expect_with :rspec do |c|
-		c.syntax = :expect
-		c.on_potential_false_positives = :nothing
-	end
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
+    c.on_potential_false_positives = :nothing
+  end
 end

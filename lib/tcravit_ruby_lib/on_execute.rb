@@ -21,24 +21,24 @@
 
 
 module Kernel
-	#########################################################################
-	# A bit of ruby hackery to enable the script to be run directly 
-	# from the command line, as well as included into other code.
-	# (Courtesy of elliottcable).
-	#
-	# Example:
-	#
-	#    class MyApp
-	#    	# ...
-	#    	def start()
-	#    		#...
-	#    	end
-	#    end
-	#
-	#    on_execute do
-	#    	MyApp.new().start()
-	#    end 
-	#########################################################################
+  #########################################################################
+  # A bit of ruby hackery to enable the script to be run directly 
+  # from the command line, as well as included into other code.
+  # (Courtesy of elliottcable).
+  #
+  # Example:
+  #
+  #    class MyApp
+  #      # ...
+  #      def start()
+  #        #...
+  #      end
+  #    end
+  #
+  #    on_execute do
+  #      MyApp.new().start()
+  #    end 
+  #########################################################################
   def on_execute
     calling_file = caller.first.split(':').first
     if File.expand_path(calling_file) == File.expand_path($0)
