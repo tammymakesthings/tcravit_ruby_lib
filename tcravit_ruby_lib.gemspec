@@ -7,8 +7,9 @@ Gem::Specification.new do |s|
   s.version     = TcravitRubyLib::VERSION
   s.authors     = ["Tammy Cravit"]
   s.email       = ["tammycravit@me.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/tammycravit/tcravit_ruby_lib"
   s.summary     = %q{Random reusable ruby stuff}
+  s.license     = 'Apache-2.0'
 
   s.rubyforge_project = "tcravit_ruby_lib"
 
@@ -17,10 +18,10 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-	s.add_dependency 'simple-password-gen'
+	s.add_dependency 'simple-password-gen', '~> 0.1'
 
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'rake'
-  s.add_development_dependency 'fantaskspec'
-  s.add_development_dependency 'coderay'
+  s.add_development_dependency 'rspec', '~> 3.7'
+  s.add_development_dependency 'rake', '~> 12.3'
+  s.add_development_dependency 'fantaskspec', '~> 1.1'
+  s.add_development_dependency 'coderay', '~> 1.1'
 end
