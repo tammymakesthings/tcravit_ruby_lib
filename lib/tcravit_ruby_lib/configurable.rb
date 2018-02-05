@@ -40,6 +40,8 @@ module TcravitRubyLib    #:nodoc:
 # end
 
 module Configurable
+
+  # +nodoc+
   def self.with(*attrs)
     not_provided = Object.new
     config_class = Class.new do

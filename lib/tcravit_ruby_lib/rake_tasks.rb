@@ -22,6 +22,11 @@
 require 'rake'
 
 module TcravitRubyLib
+  ##
+  # Load and install rake tasks defined within the TcravitRubyLib library.
+  #
+  # This module is designed to be require'd by a Rakefile, and will load and
+  # install all of the Rake tasks contained within the library.
   class RakeTasks
     include Rake::DSL if defined?(Rake::DSL)
 

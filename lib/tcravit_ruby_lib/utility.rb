@@ -22,9 +22,23 @@
 require 'simple-password-gen'
 
 module TcravitRubyLib
+  ##
+  # Contains random Ruby utility functions that don't fit anywhere else.
   module Utility
     extend self
     
+    ##
+    # Generate random alphanumeric passwords.
+    #
+    # Previously this method generated passwords by shuffling characters
+    # in an array. It's now  just a wrapper for the +simple-password-gen+
+    # gem.
+    #
+    # @param size [Integer] The length of the password to generate. Defaults
+    # to 16 characters if not specified.
+    # @param pronounceable [Boolean] True to generate pronounceable passwords.
+    # Defaults to false.
+    # @return [String] The generated password.
     def random_alphanumeric(size=16, pronounceable=false)
       if pronounceable then
         return Password.pronounceable(size*2)[0..(size-1)]

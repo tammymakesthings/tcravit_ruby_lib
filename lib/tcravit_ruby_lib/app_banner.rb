@@ -20,8 +20,50 @@
 #  limitations under the License.
 ############################################################################
 
-module TcravitRubyLib  #-nodoc-#
-  def self.Banner(opts={})
+module TcravitRubyLib #-nodoc-#  
+
+  extend self
+
+  ##
+  # Generate an app startup banner for a command-line application.
+  #
+  # == Banner Formatting
+  #
+  # The app banner will be framed with asterisks. By default, it will be 76
+  # characters long, though this can be overridden by passing in a value for
+  # +line_length+.
+  #
+  # If a +description+ is included, the first text line of the banner will
+  # take the form "name: description"; otherwise, just the name will be
+  # output. This line will be centered, with whitespace added to the ends to
+  # make the asterisks line up. Otherwise, just the app name will be output.
+  #
+  # If any of +version+, +date+, and/or +author+ are supplied, these will be
+  # joined (in that order) by commas, and a second centered line of text
+  # containing those components will be output. If none are supplied, no
+  # second line will be output.
+  #
+  # == Arguments
+  #
+  # For flexibility, parameters are all passed in a hash. The method accepts
+  # the following options:
+  #
+  # * `:name` - The name of the application. Required.
+  # * `:description` - A brief description of the application. Optional.
+  # * `:version`
+  # * `:date`
+  # * `:author`
+  # * `:line_length`
+  #
+  # The only required option is +name+, and an ArgumentError will be raised
+  # if it is not supplied. All other options are optional, and the method
+  # will simply use whichever ones are supplied to generate the banner.
+  #
+  # For examples, see the RSpec tests for this method.
+  #
+  # @param opts [Hash] A hash of options.
+  # @return [String] The app banner, ready to print out
+  def Banner(opts={})
     raise ArgumentError, "Name not provided" unless opts.keys.include?("name".to_sym)
   
     line_length = 76
@@ -55,7 +97,8 @@ module TcravitRubyLib  #-nodoc-#
     return lines.join("\n")
   end
 
-  def self.asterisk_pad(data, length=76)
+  private 
+  def asterisk_pad(data, length=76)
     buf = "* " + (" " * (((length-4) - data.length) / 2)) + data
     buf = buf + (" " * ((length-2) - buf.length)) + " *"
     return buf
