@@ -33,17 +33,12 @@ require File.join(File.dirname(__FILE__), "matcher_helpers.rb")
 
 RSpec::Matchers.define :be_a_rake_task_named do |expected|
   match do |actual|
-    @errors = []
-    @errors.push("expected a Rake task, but got a \"#{actual.class.name}\" instead") unless (actual.class.name == "Rake::Task")
     begin
-      @errors.push("expected the task to be named \"#{expected}\", but got name \"#{actual.name}\" instead") unless (actual.name == expected)
-    rescue
-      @errors.push("expected the task to respond to \"name\"")
+      expect(actual).to be_a(Rake::Task)
+      expect(actual.name).to be == (expected)
+    rescue RSpec::Expectations::MultipleExpectationsNotMetError => e
+      puts e.message
+      exit(1)
     end
-    @errors.empty?
-  end
-
-  failure_message do |actual|
-    @errors.join("\n")
   end
 end

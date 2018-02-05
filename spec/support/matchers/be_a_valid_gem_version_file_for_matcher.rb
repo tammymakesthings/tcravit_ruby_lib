@@ -35,23 +35,17 @@
 require 'rspec/expectations'
 require File.join(File.dirname(__FILE__), "matcher_helpers.rb")
 
-RSpec::Matchers.define :be_a_valid_gem_version_file_for do |module_name|
+RSpec::Matchers.define :be_a_valid_gem_version_file_for do |expected|
   match do |actual|
-    @errors  = []
-    if File.exist?(actual) then
+    begin
+      expect(File).to exist(actual)
       contents = TcravitRubyLib::MatchHelpers.read_output_file(actual) 
-      @errors.push("expected the file to start with a module declaration") unless contents[0].match(/^\s*module/)
-      @errors.push("expected the file to declare a module named \"#{module_name}\"") unless contents[0].match(/^\s*module #{module_name}/)
-      @errors.push("expected the file to declare VERSION_DATA") unless contents[1].match(/^\s*VERSION_DATA =/)
-      @errors.push("expected VERSION_DATA to be a [major,minor,build] array") unless contents[1].match(/^\s+VERSION_DATA = \[\d+, \d+, \d+\]\s*$/)
-      @errors.push("expected the file to end with an \"end\" line") unless contents[3]  == "end"
-    else
-      @errors.push("expected the file #{actual} to exist")
+      expect(contents[0]).to match(/^\s*module #{expected}/)
+      expect(contents[1]).to match(/^\s+VERSION_DATA = \[\d+, \d+, \d+\]\s*$/)
+      expect(contents[3]).to be == "end"
+    rescue RSpec::Expectations::MultipleExpectationsNotMetError => e
+      puts e.message
+      exit(1)
     end
-    @errors.empty?
-  end
-
-  failure_message do |actual|
-    @errors.join("\n")
   end
 end
