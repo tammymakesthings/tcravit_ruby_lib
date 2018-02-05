@@ -33,16 +33,22 @@ require File.join(File.dirname(__FILE__), "matcher_helpers.rb")
 
 RSpec::Matchers.define :declare_the_gem_version_to_be do |expected_major, expected_minor, expected_build|
   match do |actual|
+    @errors = []
     contents = TcravitRubyLib::MatchHelpers.read_output_file(actual)
     v = eval(contents[1].downcase)
     unless expected_major.nil?
-      expect(v[0]).to be == expected_major
+      @errors.push("expected major version #{expected_major} but got #{v[0]}") unless (v[0] == expected_major)
     end
     unless expected_minor.nil?
-      expect(v[1]).to be == expected_minor
+      @errors.push("expected minor version #{expected_minor} but got #{v[1]}") unless (v[1] == expected_minor)
     end
     unless expected_build.nil?
-      expect(v[2]).to be == expected_build
+      @errors.push("expected build version #{expected_build} but got #{v[2]}") unless (v[2] == expected_build)
     end
+    @errors.empty?
+  end
+
+  failure_message do |actual|
+    @errors.join("\n")
   end
 end
