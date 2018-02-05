@@ -24,8 +24,8 @@ $:.unshift File.dirname(__FILE__)
 # Make sure we load the version definitions first
 require "tcravit_ruby_lib/version"
 
-Dir[File.join(File.dirname(__FILE__), "tcravit_ruby_lib", "*.rb")].each do |f|
-  require File.join("tcravit_ruby_lib", File.basename(f)) unless File.basename(f) == "version.rb"
+Dir[File.join(File.dirname(__FILE__), "tcravit_ruby_lib", "*.rb")].reject { |x| File.basename(x) == "version.rb" }.each do |f|
+  require File.join("tcravit_ruby_lib", File.basename(f)) 
 end
 
 module TcravitRubyLib # :nodoc:
