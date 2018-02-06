@@ -84,7 +84,7 @@ def update_gem_version_part(index=2, test_mode=false)
   vd[index] = vd[index] + 1
 
   if test_mode then
-    write_output_to("/tmp/bump_ver.out", create_file_contents(module_name, vd))
+    write_output_to("/tmp/bump_ver_#{positions[index]}.out", create_file_contents(module_name, vd))
   else
     write_output_to(version_file, create_file_contents(module_name, vd))
   end
@@ -99,7 +99,7 @@ def set_gem_version(major, minor, build, test_mode=false)
   vd = [major, minor, build]
 
   if test_mode then
-    write_output_to("/tmp/bump_ver.out", create_file_contents(module_name, vd))
+    write_output_to("/tmp/bump_ver_set.out", create_file_contents(module_name, vd))
   else
     write_output_to(version_file, create_file_contents(module_name, vd))
   end

@@ -28,10 +28,14 @@ require_custom_matcher_named("be_a_rake_task_named")
 require_custom_matcher_named("be_a_valid_gem_version_file_for")
 require_custom_matcher_named("declare_the_gem_version_to_be")
 
-TEST_VERSION_FILE = "/tmp/bump_ver.out"
+@test_version_file = "/tmp/bump_ver.out"
 
 describe "bump_ver.rake" do 
   describe "version:bump:major", type: :rake do
+    before(:all) do
+      @test_version_file = "/tmp/bump_ver_major.out"
+    end
+
     context "the basics" do 
       it "should be a rake task" do
         expect(subject).to be_a_rake_task_named("version:bump:major")
@@ -40,25 +44,29 @@ describe "bump_ver.rake" do
 
     context "file generation" do
       before(:each) do
-        File.delete(TEST_VERSION_FILE) if File.exist?("/tmp/bump_ver.out")
+        File.delete(@test_version_file) if File.exist?(@test_version_file)
       end
 
       it "should generate a file with the right format and module name" do
         args = to_task_arguments(1)
         task.execute(args)
-        expect(TEST_VERSION_FILE).to be_a_valid_gem_version_file_for("TcravitRubyLib")
+        expect(@test_version_file).to be_a_valid_gem_version_file_for("TcravitRubyLib")
       end
 
       it "should increment the major version number" do
         initial_version = TcravitRubyLib::VERSION_DATA.clone
         args = to_task_arguments(1)
         task.execute(args)
-        expect(TEST_VERSION_FILE).to declare_the_gem_version_to_be((initial_version[0] + 1), initial_version[1], initial_version[2])
+        expect(@test_version_file).to declare_the_gem_version_to_be((initial_version[0] + 1), initial_version[1], initial_version[2])
       end
     end
   end
 
   describe "version:bump:minor", type: :rake do
+    before(:all) do
+      @test_version_file = "/tmp/bump_ver_minor.out"
+    end
+
     context "the basics" do 
       it "should be a rake task" do
         expect(subject).to be_a_rake_task_named("version:bump:minor")
@@ -67,25 +75,29 @@ describe "bump_ver.rake" do
 
     context "file generation" do
       before(:each) do
-        File.delete(TEST_VERSION_FILE) if File.exist?("/tmp/bump_ver.out")
+        File.delete(@test_version_file) if File.exist?(@test_version_file)
       end
 
       it "should generate a file with the right format and module name" do
         args = to_task_arguments(1)
         task.execute(args)
-        expect(TEST_VERSION_FILE).to be_a_valid_gem_version_file_for("TcravitRubyLib")
+        expect(@test_version_file).to be_a_valid_gem_version_file_for("TcravitRubyLib")
       end
 
       it "should increment the minor version number" do
         initial_version = TcravitRubyLib::VERSION_DATA.clone
         args = to_task_arguments(1)
         task.execute(args)
-        expect(TEST_VERSION_FILE).to declare_the_gem_version_to_be(initial_version[0], (initial_version[1] + 1), initial_version[2])
+        expect(@test_version_file).to declare_the_gem_version_to_be(initial_version[0], (initial_version[1] + 1), initial_version[2])
       end
     end
   end
 
   describe "version:bump:build", type: :rake do
+    before(:all) do
+      @test_version_file = "/tmp/bump_ver_build.out"
+    end
+
     context "the basics" do 
       it "should be a rake task" do
         expect(subject).to be_a_rake_task_named("version:bump:build")
@@ -94,25 +106,29 @@ describe "bump_ver.rake" do
 
     context "file generation" do
       before(:each) do
-        File.delete(TEST_VERSION_FILE) if File.exist?("/tmp/bump_ver.out")
+        File.delete(@test_version_file) if File.exist?(@test_version_file)
       end
 
       it "should generate a file with the right format and module name" do
         args = to_task_arguments(1)
         task.execute(args)
-        expect(TEST_VERSION_FILE).to be_a_valid_gem_version_file_for("TcravitRubyLib")
+        expect(@test_version_file).to be_a_valid_gem_version_file_for("TcravitRubyLib")
       end
 
       it "should increment build version number" do
         initial_version = TcravitRubyLib::VERSION_DATA.clone
         args = to_task_arguments(1)
         task.execute(args)
-        expect(TEST_VERSION_FILE).to declare_the_gem_version_to_be(initial_version[0], initial_version[1], (initial_version[2] + 1))
+        expect(@test_version_file).to declare_the_gem_version_to_be(initial_version[0], initial_version[1], (initial_version[2] + 1))
       end
     end
   end
 
   describe "version:bump:set", type: :rake do
+    before(:all) do
+      @test_version_file = "/tmp/bump_ver_set.out"
+    end
+
     context "the basics" do 
       it "should be a rake task" do
         expect(subject).to be_a_rake_task_named("version:bump:set")
@@ -121,19 +137,19 @@ describe "bump_ver.rake" do
 
     context "file generation" do
       before(:each) do
-        File.delete(TEST_VERSION_FILE) if File.exist?("/tmp/bump_ver.out")
+        File.delete(@test_version_file) if File.exist?(@test_version_file)
       end
 
       it "should generate a file with the right format and module name" do
         args = to_task_arguments(3,4,5,11)
         task.execute(args)
-        expect(TEST_VERSION_FILE).to be_a_valid_gem_version_file_for("TcravitRubyLib")
+        expect(@test_version_file).to be_a_valid_gem_version_file_for("TcravitRubyLib")
       end
 
       it "should generate a file with the right version number" do
         args = to_task_arguments(3,4,5,1)
         task.execute(args)
-        expect(TEST_VERSION_FILE).to declare_the_gem_version_to_be(3, 4, 5)
+        expect(@test_version_file).to declare_the_gem_version_to_be(3, 4, 5)
       end
     end
   end
