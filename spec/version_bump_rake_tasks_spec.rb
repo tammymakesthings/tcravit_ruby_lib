@@ -24,13 +24,14 @@ require "rake"
 require "tcravit_ruby_lib/rake_tasks"
 require "fantaskspec"
 
+# Load our custom test matchers. require_custom_matcher_named is a bit of
+# syntactic sugar defined in spec_helper.rb
 require_custom_matcher_named("be_a_rake_task_named")
 require_custom_matcher_named("be_a_valid_gem_version_file_for")
 require_custom_matcher_named("declare_the_gem_version_to_be")
 
-@test_version_file = "/tmp/bump_ver.out"
+RSpec.describe "bump_ver.rake" do 
 
-describe "bump_ver.rake" do 
   describe "version:bump:major", type: :rake do
     before(:all) do
       @test_version_file = "/tmp/bump_ver_major.out"
