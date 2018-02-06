@@ -57,7 +57,7 @@ describe "bump_ver.rake" do
         initial_version = TcravitRubyLib::VERSION_DATA.clone
         args = to_task_arguments(1)
         task.execute(args)
-        expect(@test_version_file).to declare_the_gem_version_to_be((initial_version[0] + 1), initial_version[1], initial_version[2])
+        expect(@test_version_file).to declare_the_gem_version_to_be((initial_version[0] + 1), 0, 0)
       end
     end
   end
@@ -88,7 +88,7 @@ describe "bump_ver.rake" do
         initial_version = TcravitRubyLib::VERSION_DATA.clone
         args = to_task_arguments(1)
         task.execute(args)
-        expect(@test_version_file).to declare_the_gem_version_to_be(initial_version[0], (initial_version[1] + 1), initial_version[2])
+        expect(@test_version_file).to declare_the_gem_version_to_be(initial_version[0], (initial_version[1] + 1), 0) 
       end
     end
   end

@@ -19,16 +19,9 @@
 ############################################################################
 
 def find_version_file
-  curr_dir = File.dirname(__FILE__)
-  while File.exist?(File.join(curr_dir, "Rakefile")) == false
-    if curr_dir == "/"
-      return nil
-    else
-      curr_dir = File.expand_path(curr_dir + "/..")
-    end
-  end
-  if File.directory?(File.join(curr_dir)) then
-    ver_file = Dir["#{curr_dir}/**/version.rb"]
+  rake_dir = Rake.original_dir
+  if File.directory?(rake_dir) then
+    ver_file = Dir["#{rake_dir}/**/version.rb"]
     if ver_file.nil?
       return nil
     else
@@ -82,6 +75,12 @@ def update_gem_version_part(index=2, test_mode=false)
 
   vd = TcravitRubyLib::VERSION_DATA
   vd[index] = vd[index] + 1
+  if (index < 2)
+    vd[2] = 0
+  end
+  if (index == 0)
+    vd[1] = 0
+  end
 
   if test_mode then
     write_output_to("/tmp/bump_ver_#{positions[index]}.out", create_file_contents(module_name, vd))
