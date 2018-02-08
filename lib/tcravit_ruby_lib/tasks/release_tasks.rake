@@ -35,3 +35,16 @@ namespace :release do
     end
   end
 end
+
+desc "Release a Gem, including updating the version number"
+task :release_gem do
+  if (Dir[File.join(Rake.original_dir, "*.gemspec")].count == 0)
+    fail("Error: #{Rake.original_dir} does not contain a gemspec file")
+  end
+  begin
+    Rake::Task["release:prepare"].invoke
+  rescue
+    fail("Could not prepare release")
+  end
+  Rake::Task["release"].invoke
+end
