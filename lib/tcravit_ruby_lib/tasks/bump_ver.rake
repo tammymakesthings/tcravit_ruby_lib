@@ -73,7 +73,7 @@ def update_gem_version_part(index=2, test_mode=false)
   version_file = load_gem_version_file
   module_name = find_module_name_from(version_file)
 
-  vd = TcravitRubyLib::VERSION_DATA
+  vd = instance_eval "#{module_name}::VERSION_DATA"
   vd[index] = vd[index] + 1
   if (index < 2)
     vd[2] = 0
