@@ -24,9 +24,14 @@ require 'git'
 namespace :release do
   desc "Prepare for release by incrementing the build number and checking in version.rb"
   task :prepare do
-    Rake::Task["version:bump:build"].invoke
-    g = Git.open(Rake.original_dir)
-    g.add(File.join(Rake.original_dir, "lib", File.basename(Rake.original_dir), "version.rb"))
-    g.commit("Bump version (via release:prepare rake task)")
+    begin
+      Rake::Task["version:bump:build"].invoke
+      g = Git.open(Rake.original_dir)
+      g.add(File.join(Rake.original_dir, "lib", File.basename(Rake.original_dir), "version.rb"))
+      g.commit("Bump version (via release:prepare rake task)")
+      puts "Committed version.rb to git"
+    rescue 
+      puts "Rake task release:prepare failed!"
+    end
   end
 end
