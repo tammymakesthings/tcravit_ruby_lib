@@ -25,4 +25,10 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake', '~> 12.3'
   s.add_development_dependency 'fantaskspec', '~> 1.1'
   s.add_development_dependency 'coderay', '~> 1.1'
+
+  s.add_development_dependency 'guard'
+  s.add_development_dependency 'guard-rspec'
+  s.add_development_dependency 'guard-bundler'
+
+  s.add_development_dependency 'simplecov'
 end
