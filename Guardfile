@@ -44,7 +44,7 @@ guard :bundler do
   require 'guard/bundler/verify'
   helper = Guard::Bundler::Verify.new
 
-  files = ['Gemfile', 'rotor_machine.gemspec']
+  files = ['Gemfile', 'tcravit_ruby_lib.gemspec']
 
   # Assume files are symlinked from somewhere
   files.each { |file| watch(helper.real_path(file)) }
