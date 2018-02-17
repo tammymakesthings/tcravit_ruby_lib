@@ -1,0 +1,12 @@
+# ~/.tmuxinator/tcravit_ruby_lib.yml
+
+name: tcravit_ruby_lib
+root: ~/projects/tcravit_ruby_lib
+
+windows:
+  - code: vim lib
+  - specs: vim spec
+  - guard: bundle exec guard
+  - pry: bin/console
+  - shell: zsh --login
+
