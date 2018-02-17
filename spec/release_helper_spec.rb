@@ -30,6 +30,7 @@ require_helper_named("release_tasks_helper")
 # Load our custom test matchers. require_custom_matcher_named is a bit of
 # syntactic sugar defined in spec_helper.rb
 require_custom_matcher_named("be_a_valid_gem_version_file_for")
+require_custom_matcher_named("declare_the_gem_version_to_be")
 
 RSpec.describe "release_tasks_helper" do
   before(:all) do
@@ -78,6 +79,11 @@ RSpec.describe "release_tasks_helper" do
       filename = File.join(@basedir, "lib", "mock_gem", "version.rb")
       expect(File).to exist(filename)
       expect(filename).to be_a_valid_gem_version_file_for("MockGem")
+    end
+
+    it "should declare the gem version to be 1.0.5" do
+      filename = File.join(@basedir, "lib", "mock_gem", "version.rb")
+      expect(filename).to declare_the_gem_version_to_be(1,0,5)
     end
   end
 

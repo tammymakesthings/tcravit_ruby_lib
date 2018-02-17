@@ -5,7 +5,7 @@
 # Specs for   : release rake tasks in tcravit_ruby_lib/rake_tasks
 ############################################################################
 #  Copyright 2011-2018, Tammy Cravit.
-# 
+#
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
 #  You may obtain a copy of the License at
@@ -35,26 +35,42 @@ require_custom_matcher_named("be_a_rake_task_named")
 require_custom_matcher_named("be_a_valid_gem_version_file_for")
 require_custom_matcher_named("declare_the_gem_version_to_be")
 
+# A helper to run a Rake task in a specific directory
+def run_rake_task_in_dir(dir_name, task_name)
+  system("cd #{dir_name}; rake -f #{dir_name}/Rakefile #{task_name}")
+end
+
 RSpec.describe "release_tasks.rake", type: :rake do
   describe "release:prepare" do
+    before(:all) do
+      @base_dir = File.join("/tmp", "release_prepare_test")
+      FileUtils.remove_dir(@base_dir) if Dir.exist?(@base_dir)
+    end
+
+    after(:each) do
+       FileUtils.remove_dir(@base_dir) if Dir.exist?(@base_dir)
+    end
+
     it "should be a rake task" do
       expect(subject).to be_a_rake_task_named("release:prepare")
     end
 
     it "should bump the gem version" do
-      pending
-      # create_mock_gem_in("/tmp/release_prepare_test")
-      # system("cd /tmp/release_prepare_test ; rake release:prepare")
-      # Run the "release:prepare" task in /tmp/release_prepare_test
-      # Check the gem version in /tmp/release_prepare_test
+      create_mock_gem_in(@base_dir)
+      run_rake_task_in_dir(@base_dir, "release:prepare")
+
+      ver_file = File.join(@base_dir, "lib", "mock_gem", "version.rb")
+      expect(ver_file).to be_a_valid_gem_version_file_for("MockGem")
+      expect(ver_file).to declare_the_gem_version_to_be(1,0,6)
     end
 
     it "should check in the version file to git" do
-      pending
-      # create_mock_gem_in("/tmp/release_prepare_test")
-      # Run the "release:prepare" task in /tmp/release_prepare_test
-      # Check that version.rb was committed to git with the right message
-    end
+      create_mock_gem_in(@base_dir)
+      run_rake_task_in_dir(@base_dir, "release:prepare")
 
+      g = Git.open(@base_dir)
+      expect(g.log.first.message).to be == "Bump version (via release:prepare rake task)"
+      expect(g.status['lib/mock_gem/version.rb'].type).to be_nil
+    end
   end
 end

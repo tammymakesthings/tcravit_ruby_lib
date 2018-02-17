@@ -45,8 +45,8 @@ def require_custom_matcher_named(matcher_name)
 end
 
 RSpec.configure do |config|
-#  config.formatter     = 'progress'
-  config.formatter     = 'documentation'
+  config.formatter     = 'progress'
+#  config.formatter     = 'documentation'
   config.expect_with :rspec do |c|
     c.syntax = :expect
     c.on_potential_false_positives = :nothing

@@ -27,24 +27,11 @@ namespace :release do
     begin
       Rake::Task["version:bump:build"].invoke
       g = Git.open(Rake.original_dir)
-      g.add(File.join(Rake.original_dir, "lib", File.basename(Rake.original_dir), "version.rb"))
+      g.add(File.join(Rake.original_dir, "lib"))
       g.commit("Bump version (via release:prepare rake task)")
       puts "Committed version.rb to git"
-    rescue 
-      puts "Rake task release:prepare failed!"
+    rescue Exception => e
+      puts "Rake task release:prepare failed! (#{e})"
     end
   end
-end
-
-desc "Release a Gem, including updating the version number"
-task :release_gem do
-  if (Dir[File.join(Rake.original_dir, "*.gemspec")].count == 0)
-    fail("Error: #{Rake.original_dir} does not contain a gemspec file")
-  end
-  begin
-    Rake::Task["release:prepare"].invoke
-  rescue
-    fail("Could not prepare release")
-  end
-  Rake::Task["release"].invoke
 end
