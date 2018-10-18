@@ -2,6 +2,8 @@ require 'fileutils'
 require 'git'
 
 def create_mock_gem_in(mock_dir)
+  puts "Creating mock_gem in #{mock_dir}"
+
   Dir.mkdir(mock_dir) unless Dir.exist?(mock_dir)
   Dir.mkdir(File.join(mock_dir, "lib"))
   Dir.mkdir(File.join(mock_dir, "lib", "mock_gem"))

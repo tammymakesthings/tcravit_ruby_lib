@@ -25,6 +25,8 @@ SimpleCov.start do
   add_group "Tests",   "spec"
 end
 
+ENV['RSPEC_RUNNING'] = "true"
+
 require 'rspec'
 require 'tcravit_ruby_lib'
 

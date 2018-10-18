@@ -1,10 +1,10 @@
 ############################################################################
 # Rake tasks to update the version.rb file for a Gem
-# 
+#
 # Version 1.0, 2018-02-01, tammycravit@me.com
 ############################################################################
 #  Copyright 2018, Tammy Cravit.
-# 
+#
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
 #  You may obtain a copy of the License at
@@ -19,7 +19,13 @@
 ############################################################################
 
 def find_version_file
-  rake_dir = Rake.original_dir
+  # mock_gem_dir is set by the RSpec specs to override the search directory
+  if ENV.include?("mock_gem_dir") and Dir.exist?(ENV['mock_gem_dir'])
+    rake_dir = ENV["mock_gem_dir"]
+  else
+    rake_dir = Rake.original_dir
+  end
+
   if File.directory?(rake_dir) then
     ver_file = Dir["#{rake_dir}/**/version.rb"]
     if ver_file.nil?
@@ -58,8 +64,8 @@ def find_module_name_from(version_file)
   File.foreach(version_file) do |l|
     next if l.match(/^\s*$/)
     next if l.match(/^\s*\#/)
-    m = l.match(/^\s*module (\S+)\s*$/) 
-    unless  m.nil? 
+    m = l.match(/^\s*module (\S+)\s*$/)
+    unless  m.nil?
       module_name = m[1]
       break
     end
@@ -82,11 +88,7 @@ def update_gem_version_part(index=2, test_mode=false)
     vd[1] = 0
   end
 
-  if test_mode then
-    write_output_to("/tmp/bump_ver_#{positions[index]}.out", create_file_contents(module_name, vd))
-  else
-    write_output_to(version_file, create_file_contents(module_name, vd))
-  end
+  write_output_to(version_file, create_file_contents(module_name, vd))
 
   puts "Updated #{positions[index]} number to #{vd[index]}; version is now #{vd.join('.')}" unless test_mode
 end
@@ -97,11 +99,7 @@ def set_gem_version(major, minor, build, test_mode=false)
 
   vd = [major, minor, build]
 
-  if test_mode then
-    write_output_to("/tmp/bump_ver_set.out", create_file_contents(module_name, vd))
-  else
-    write_output_to(version_file, create_file_contents(module_name, vd))
-  end
+  write_output_to(version_file, create_file_contents(module_name, vd))
 
   puts "Forced Gem version to #{vd.join('.')}" unless test_mode
 end
@@ -109,27 +107,27 @@ end
 namespace :version do
   namespace :bump do
     desc 'Increment the major number of the gem'
-    task :major, [:test_mode] do |t, args|
-      update_gem_version_part 0, args[:test_mode]
+    task :major do |t, args|
+      update_gem_version_part 0, ENV.include?("RSPEC_RUNNING")
     end
 
     desc 'Increment the minor number of the gem'
-    task :minor, [:test_mode] do |t, args|
-      update_gem_version_part 1, args[:test_mode]
+    task :minor do |t, args|
+      update_gem_version_part 1, ENV.include?("RSPEC_RUNNING")
     end
 
     desc 'Increment the build number of the gem'
-    task :build, [:test_mode] do |t, args|
-      update_gem_version_part 2, args[:test_mode]
+    task :build do |t, args|
+      update_gem_version_part 2, ENV.include?("RSPEC_RUNNING")
     end
 
     desc "Set the version number to a specific version"
-    task :set, [:major, :minor, :build, :test_mode] do |t, args|
+    task :set, [:major, :minor, :build]  do |t, args|
       major = args[:major] || 1
       minor = args[:minor] || 0
       build = args[:build] || 0
 
-      set_gem_version major, minor, build, args[:test_mode]
+      set_gem_version major, minor, build, ENV.include?("RSPEC_RUNNING")
     end
   end
 end

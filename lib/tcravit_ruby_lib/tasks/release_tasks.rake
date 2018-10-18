@@ -29,7 +29,7 @@ namespace :release do
       g = Git.open(Rake.original_dir)
       g.add(File.join(Rake.original_dir, "lib"))
       g.commit("Bump version (via release:prepare rake task)")
-      puts "Committed version.rb to git"
+      puts "Committed version.rb to git" unless ENV.include?("RSPEC_RUNNING")
     rescue Exception => e
       puts "Rake task release:prepare failed! (#{e})"
     end

@@ -5,7 +5,7 @@
 # Specs for   : version:bump rake tasks in tcravit_ruby_lib/rake_tasks
 ############################################################################
 #  Copyright 2011-2018, Tammy Cravit.
-# 
+#
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
 #  You may obtain a copy of the License at
@@ -23,132 +23,151 @@ require 'spec_helper'
 require "rake"
 require "tcravit_ruby_lib/rake_tasks"
 require "fantaskspec"
+require 'fileutils'
+
+require_helper_named "release_tasks_helper"
 
 # Load our custom test matchers. require_custom_matcher_named is a bit of
 # syntactic sugar defined in spec_helper.rb
-require_custom_matcher_named("be_a_rake_task_named")
-require_custom_matcher_named("be_a_valid_gem_version_file_for")
-require_custom_matcher_named("declare_the_gem_version_to_be")
+require_custom_matcher_named "be_a_rake_task_named"
+require_custom_matcher_named "be_a_valid_gem_version_file_for"
+require_custom_matcher_named "declare_the_gem_version_to_be"
 
-RSpec.describe "bump_ver.rake" do 
+RSpec.describe "bump_ver.rake" do
 
   describe "version:bump:major", type: :rake do
     before(:all) do
-      @test_version_file = "/tmp/bump_ver_major.out"
+      @mock_gem_dir = File.join("/tmp", "mock_gem")
+      @test_version_file = File.join(@mock_gem_dir, "lib", "mock_gem", "version.rb")
+      ENV["mock_gem_dir"] = @mock_gem_dir
     end
 
-    context "the basics" do 
+    before(:each) do
+      FileUtils.remove_dir @mock_gem_dir if Dir.exist?(@mock_gem_dir)
+      create_mock_gem_in @mock_gem_dir
+    end
+
+    after(:each) do
+      FileUtils.remove_dir @mock_gem_dir
+    end
+
+    context "the basics" do
       it "should be a rake task" do
         expect(subject).to be_a_rake_task_named("version:bump:major")
       end
     end
 
     context "file generation" do
-      before(:each) do
-        File.delete(@test_version_file) if File.exist?(@test_version_file)
-      end
-
       it "should generate a file with the right format and module name" do
-        args = to_task_arguments(1)
-        task.execute(args)
-        expect(@test_version_file).to be_a_valid_gem_version_file_for("TcravitRubyLib")
+        task.execute
+        expect(@test_version_file).to be_a_valid_gem_version_file_for("MockGem")
       end
 
       it "should increment the major version number" do
-        initial_version = TcravitRubyLib::VERSION_DATA.clone
-        args = to_task_arguments(1)
-        task.execute(args)
-        expect(@test_version_file).to declare_the_gem_version_to_be((initial_version[0] + 1), 0, 0)
+        task.execute
+        expect(@test_version_file).to declare_the_gem_version_to_be(2, 0, 0)
       end
     end
   end
 
   describe "version:bump:minor", type: :rake do
     before(:all) do
-      @test_version_file = "/tmp/bump_ver_minor.out"
+      @mock_gem_dir = File.join("/tmp", "mock_gem")
+      @test_version_file = File.join(@mock_gem_dir, "lib", "mock_gem", "version.rb")
+      ENV["mock_gem_dir"] = @mock_gem_dir
     end
 
-    context "the basics" do 
+    before(:each) do
+      create_mock_gem_in @mock_gem_dir
+    end
+
+    after(:each) do
+      FileUtils.remove_dir @mock_gem_dir
+    end
+
+    context "the basics" do
       it "should be a rake task" do
         expect(subject).to be_a_rake_task_named("version:bump:minor")
       end
     end
 
     context "file generation" do
-      before(:each) do
-        File.delete(@test_version_file) if File.exist?(@test_version_file)
-      end
-
       it "should generate a file with the right format and module name" do
-        args = to_task_arguments(1)
-        task.execute(args)
-        expect(@test_version_file).to be_a_valid_gem_version_file_for("TcravitRubyLib")
+        task.execute
+        expect(@test_version_file).to be_a_valid_gem_version_file_for("MockGem")
       end
 
       it "should increment the minor version number" do
-        initial_version = TcravitRubyLib::VERSION_DATA.clone
-        args = to_task_arguments(1)
-        task.execute(args)
-        expect(@test_version_file).to declare_the_gem_version_to_be(initial_version[0], (initial_version[1] + 1), 0) 
+        task.execute
+        expect(@test_version_file).to declare_the_gem_version_to_be(1, 1, 0)
       end
     end
   end
 
   describe "version:bump:build", type: :rake do
     before(:all) do
-      @test_version_file = "/tmp/bump_ver_build.out"
+      @mock_gem_dir = File.join("/tmp", "mock_gem")
+      @test_version_file = File.join(@mock_gem_dir, "lib", "mock_gem", "version.rb")
+      ENV["mock_gem_dir"] = @mock_gem_dir
     end
 
-    context "the basics" do 
+    before(:each) do
+      create_mock_gem_in @mock_gem_dir
+    end
+
+    after(:each) do
+      FileUtils.remove_dir @mock_gem_dir
+    end
+
+    context "the basics" do
       it "should be a rake task" do
         expect(subject).to be_a_rake_task_named("version:bump:build")
       end
     end
 
     context "file generation" do
-      before(:each) do
-        File.delete(@test_version_file) if File.exist?(@test_version_file)
-      end
-
       it "should generate a file with the right format and module name" do
-        args = to_task_arguments(1)
-        task.execute(args)
-        expect(@test_version_file).to be_a_valid_gem_version_file_for("TcravitRubyLib")
+        task.execute
+        expect(@test_version_file).to be_a_valid_gem_version_file_for("MockGem")
       end
 
       it "should increment build version number" do
-        initial_version = TcravitRubyLib::VERSION_DATA.clone
-        args = to_task_arguments(1)
-        task.execute(args)
-        expect(@test_version_file).to declare_the_gem_version_to_be(initial_version[0], initial_version[1], (initial_version[2] + 1))
+        task.execute
+        expect(@test_version_file).to declare_the_gem_version_to_be(1, 0, 6)
       end
     end
   end
 
   describe "version:bump:set", type: :rake do
     before(:all) do
-      @test_version_file = "/tmp/bump_ver_set.out"
+      @mock_gem_dir = File.join("/tmp", "mock_gem")
+      @test_version_file = File.join(@mock_gem_dir, "lib", "mock_gem", "version.rb")
+      ENV["mock_gem_dir"] = @mock_gem_dir
     end
 
-    context "the basics" do 
+    before(:each) do
+      create_mock_gem_in @mock_gem_dir
+    end
+
+    after(:each) do
+      FileUtils.remove_dir @mock_gem_dir
+    end
+
+    context "the basics" do
       it "should be a rake task" do
         expect(subject).to be_a_rake_task_named("version:bump:set")
       end
     end
 
     context "file generation" do
-      before(:each) do
-        File.delete(@test_version_file) if File.exist?(@test_version_file)
-      end
-
       it "should generate a file with the right format and module name" do
-        args = to_task_arguments(3,4,5,11)
+        args = to_task_arguments(3,4,5)
         task.execute(args)
-        expect(@test_version_file).to be_a_valid_gem_version_file_for("TcravitRubyLib")
+        expect(@test_version_file).to be_a_valid_gem_version_file_for("MockGem")
       end
 
       it "should generate a file with the right version number" do
-        args = to_task_arguments(3,4,5,1)
+        args = to_task_arguments(3,4,5)
         task.execute(args)
         expect(@test_version_file).to declare_the_gem_version_to_be(3, 4, 5)
       end
